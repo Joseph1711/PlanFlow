@@ -1,0 +1,118 @@
+{
+  "entities": {
+    "Task": {
+      "title": "Task",
+      "description": "A productivity task with priority, scheduling, subtasks and reminders",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "dueTime": { "type": "string" },
+        "priority": { "type": "string", "enum": ["urgent", "high", "medium", "low"] },
+        "category": { "type": "string" },
+        "estimatedMinutes": { "type": "integer" },
+        "deadline": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "in_progress", "completed"] },
+        "completedAt": { "type": "string" },
+        "reminderMinutesBefore": { "type": "integer" },
+        "isRecurring": { "type": "boolean" },
+        "recurrenceRule": { "type": "string" },
+        "projectId": { "type": "string" },
+        "scheduledStartTime": { "type": "string" },
+        "scheduledEndTime": { "type": "string" },
+        "scheduledDate": { "type": "string" },
+        "orderIndex": { "type": "integer" },
+        "lastModifiedDevice": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "priority", "status"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "A project container for organizing tasks",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "colorHex": { "type": "string" },
+        "iconName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name"]
+    },
+    "Goal": {
+      "title": "Goal",
+      "description": "A personal target or habit goal",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "targetCount": { "type": "integer" },
+        "currentCount": { "type": "integer" },
+        "unit": { "type": "string" },
+        "deadline": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "targetCount"]
+    },
+    "UserPreferences": {
+      "title": "UserPreferences",
+      "description": "User productivity and sync preferences",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "workStartHour": { "type": "integer" },
+        "workEndHour": { "type": "integer" },
+        "breakDurationMinutes": { "type": "integer" },
+        "quietHoursStart": { "type": "string" },
+        "quietHoursEnd": { "type": "string" },
+        "doNotDisturb": { "type": "boolean" },
+        "notificationsEnabled": { "type": "boolean" },
+        "crossDeviceNotifications": { "type": "boolean" },
+        "activeDeviceId": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId"]
+    },
+    "SyncEvent": {
+      "title": "SyncEvent",
+      "description": "Real-time cross-device event for phone and PC synchronization",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "sourceDevice": { "type": "string" },
+        "targetDevice": { "type": "string" },
+        "eventType": { "type": "string" },
+        "taskTitle": { "type": "string" },
+        "message": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "sourceDevice", "eventType"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/tasks/{taskId}": {
+      "schema": { "$ref": "#/entities/Task" },
+      "description": "User specific tasks"
+    },
+    "/users/{userId}/projects/{projectId}": {
+      "schema": { "$ref": "#/entities/Project" },
+      "description": "User specific projects"
+    },
+    "/users/{userId}/goals/{goalId}": {
+      "schema": { "$ref": "#/entities/Goal" },
+      "description": "User personal goals"
+    },
+    "/users/{userId}/preferences/{docId}": {
+      "schema": { "$ref": "#/entities/UserPreferences" },
+      "description": "User settings and schedule constraints"
+    },
+    "/users/{userId}/sync_events/{eventId}": {
+      "schema": { "$ref": "#/entities/SyncEvent" },
+      "description": "Cross-device sync notification queue"
+    }
+  }
+}
